@@ -3,5 +3,7 @@ use warnings;
 use strict;
 use Music::Etudomatic;
 use Test::More;
-ok(1);
+my $e = Music::Etudomatic->new(key => 'd', mode => 'base');
+ok $e->sequences;
+diag explain $e->sequences->sequences;
 done_testing;
