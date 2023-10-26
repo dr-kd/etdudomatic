@@ -1,7 +1,7 @@
 package Music::Etudomatic::Sequences;
 use Mojo::Base -base;
 use Array::Circular;
-use Music::Scales;
+use Music::Scales ();
 
 my @notes = ( [ 1 => 'c'], [ 2 => 'cis'], [ 3 => 'd'], [ 4 => 'ees'], [ 5 => 'e'],
               [ 6 => 'f'], [ 7 => 'fis'], [ 8 => 'g'], [ 9 => 'gis'], [ 10 => 'a'],
@@ -22,7 +22,7 @@ has rootnum => sub {
 
 has scale => sub {
     my ($self) = @_;
-    my @notes = map { s/#/is/; $_ } get_scale_notes($self->config->key, $self->config->mode);
+    my @notes = map { s/#/is/; $_ } Music::Scales::get_scale_notes($self->config->key, $self->config->mode);
     @notes = map { s/b/es/; lcfirst $_ } @notes;
     my @nums = map { $self->note2num->{$_} } @notes;
     return Array::Circular->new(@nums);
