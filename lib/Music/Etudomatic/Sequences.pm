@@ -29,7 +29,7 @@ has scale => sub {
 };
 
 
-has sequences => sub {
+has chordscales => sub {
     my ($self) = @_;
     my $scale = $self->scale->clone;
     my $numchordnotes = $self->config->notes_per_chord;
