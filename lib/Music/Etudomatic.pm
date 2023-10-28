@@ -32,6 +32,14 @@ has key => sub { 'c' };
 has mode => sub { 'major' };
 has notes_per_chord => sub { 3 };
 
+has asc => sub { [ 0 .. $_[0]->notes_per_chord - 1 ] };
+has desc => sub {
+    my ($self) = @_;
+    my @d = @{$self->{asc}};
+    unshift @d, pop @d;
+    return \@d;
+};
+
 has sequences => sub {
     return Music::Etudomatic::Sequences->new(config => $_[0]);
 };
