@@ -6,13 +6,21 @@ use lib 'lib';
 use Music::Etudomatic;
 use Test::More;
 
-=head1 NAME dminor.pl
+use Getopt::Long;
 
-
-=cut
 
 my $key = 'g';
 my $mode = 'major';
+my $notes_per_chord = 3;
+
+
+GetOptions ('key=s' => \$key,
+	    'mode=s' => \$mode,
+	    'chord=s' => \$notes_per_chord,
+	    'notes_per_chord=s', \$notes_per_chord,
+    );
+
+
 
 my $e = Music::Etudomatic->new(
     key => $key,
@@ -31,7 +39,6 @@ my $first;
 for my $c (map { $_->{names} } @$s) {
     my @this = @$c[@{$e->asc}];
     $first //= \@this;
-    $DB::single=1;
     push @exercise, @this;
 }
 push @exercise, @$first;
@@ -51,13 +58,15 @@ push @exercise, $b->[0]->{names}->[0];
 my $out = '';
 
 for ( 0 .. $#exercise) {
-    my $extra = $_ == 0 ? "'8" : '';
+    my $extra = $_ == 0 ? "8" : '';
     $out .=  sprintf '%s%s ', $exercise[$_], $extra;
     $out .=  "\n" if ( $_ + 1) % 4 == 0;
 }
 
 my $score = do { local $/; <DATA> };
 $score =~ s/__NOTES__/$out/m;
+$score =~ s/__KEY__/$key/m;
+$score =~ s/__MODE__/$mode/m;
 say $score;
     
 __DATA__
@@ -76,7 +85,7 @@ __DATA__
 
 \score {
   \relative c' {
-    \time 4/4 \key g \major
+    \time 4/4 \key __KEY__ \__MODE__
     __NOTES__
   }
   \layout {}
