@@ -3,13 +3,6 @@ use Mojo::Base -base;
 use Array::Circular;
 use Music::Scales ();
 
-my @notes = ( [ 1 => 'c'], [ 2 => 'cis'], [ 3 => 'd'], [ 4 => 'ees'], [ 5 => 'e'],
-              [ 6 => 'f'], [ 7 => 'fis'], [ 8 => 'g'], [ 9 => 'gis'], [ 10 => 'a'],
-              [ 11 => 'bes'], [ 12 => 'b'], );
-
-has note2num => sub { +{ map { $_->[1] => $_->[0] } @notes} };
-has num2note => sub { +{ map { $_->[0] => $_->[1] } @notes} };
-has nums => sub { Array::Circular->new(1 .. keys %{$_[0]->notes} ) };
 
 has config => sub {
     die "Config is a required attribute and must implement 'key', 'mode' and 'notes_per_chord' attributes";
@@ -19,6 +12,11 @@ has rootnum => sub {
     my ($self) = @_;
     return $self->note2num->{$self->config->key};
 };
+
+has nums      => sub { $_[0]->config->nums };
+has note2num  => sub { $_[0]->config->note2num };
+has num2note  => sub { $_[0]->config->num2note };
+
 
 has scale => sub {
     my ($self) = @_;
