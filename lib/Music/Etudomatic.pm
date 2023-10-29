@@ -50,7 +50,7 @@ my @notes = ( [ 1 => 'c'], [ 2 => 'cis'],
 
 has note2num => sub { +{ map { $_->[1] => $_->[0] } @notes} };
 has num2note => sub { +{ map { $_->[0] => $_->[1] } @notes} };
-has nums => sub { Array::Circular->new(1 .. keys %{$_[0]->notes} ) };
+has nums => sub { Array::Circular->new(1 .. @notes ) };
 
 
 has sequences => sub {
