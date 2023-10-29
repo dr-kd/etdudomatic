@@ -32,12 +32,19 @@ has chordscales => sub {
     my $scale = $self->scale->clone;
     my $numchordnotes = $self->config->notes_per_chord;
     my @chordscale = ();
+
     for my $root (0 .. $#$scale) {
         my $chord = Array::Circular->new( $scale->current,
                                           map { $scale->peek($_*2) } (1..($numchordnotes-1))
-                                      );
+	    );
+	my @chordnames;
+	for my $c (@$chord) {
+	    my $note = $self->num2note->{$c};
+	    push @chordnames, $note;
+	}
         push @chordscale, {
             nums => $chord,
+
             names => Array::Circular->new(map { $self->num2note->{$_}} @$chord),
         };
         $scale->next;

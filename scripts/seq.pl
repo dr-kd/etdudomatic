@@ -4,7 +4,6 @@ use strict;
 use v5.30;
 use lib 'lib';
 use Music::Etudomatic;
-use Test::More;
 
 use Getopt::Long;
 

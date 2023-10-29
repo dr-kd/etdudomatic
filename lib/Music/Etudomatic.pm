@@ -48,7 +48,15 @@ my @notes = ( [ 1 => 'c'], [ 2 => 'cis'],
 	      [ 10 => 'a'], [ 11 => 'bes'],
 	      [ 12 => 'b'], );
 
-has note2num => sub { +{ map { $_->[1] => $_->[0] } @notes} };
+has note2num => sub {
+    return { map { $_->[1] => $_->[0] } ( @notes, # and enharmonics
+	   [ 4 => 'des'],
+	   [ 4 => 'dis'],
+	   [ 7 => 'ges'],
+	   [ 9 => 'aes'],
+	   [ 11 => 'ais' ] )
+    }
+};
 has num2note => sub { +{ map { $_->[0] => $_->[1] } @notes} };
 has nums => sub { Array::Circular->new(1 .. @notes ) };
 
