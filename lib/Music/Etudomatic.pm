@@ -48,16 +48,24 @@ my @notes = ( [ 1 => 'c'], [ 2 => 'cis'],
 	      [ 10 => 'a'], [ 11 => 'bes'],
 	      [ 12 => 'b'], );
 
+my @enh = (
+    [ 1 => 'bis'],
+    [ 4 => 'des'],
+    [ 4 => 'dis'],
+    [ 7 => 'ges'],
+    [ 9 => 'aes'],
+    [ 11 => 'ais' ],
+);
+
 has note2num => sub {
-    return { map { $_->[1] => $_->[0] } ( @notes, # and enharmonics
-	   [ 4 => 'des'],
-	   [ 4 => 'dis'],
-	   [ 7 => 'ges'],
-	   [ 9 => 'aes'],
-	   [ 11 => 'ais' ] )
-    }
+    return { map { $_->[1] => $_->[0] } ( @notes, @enh ) } # and enharmonics
 };
-has num2note => sub { +{ map { $_->[0] => $_->[1] } @notes} };
+
+has num2note => sub {
+    my %n2n = map { $_->[0] => $_->[1] } ( @notes, ( $_[0]->key =~ /es$/ ? @enh : () ) );
+    return \%n2n;
+};
+
 has nums => sub { Array::Circular->new(1 .. @notes ) };
 
 

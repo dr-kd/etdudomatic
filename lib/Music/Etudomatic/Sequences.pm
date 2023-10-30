@@ -20,7 +20,10 @@ has num2note  => sub { $_[0]->config->num2note };
 
 has scale => sub {
     my ($self) = @_;
-    my @notes = map { s/#/is/; $_ } Music::Scales::get_scale_notes($self->config->key, $self->config->mode);
+    my $key = $self->config->key;
+    $key =~ s/es$/b/;
+    $key =~ s/is$/#/;
+    my @notes = map { s/#/is/; $_ } Music::Scales::get_scale_notes($key, $self->config->mode);
     @notes = map { s/b/es/; lcfirst $_ } @notes;
     my @nums = map { $self->note2num->{$_} } @notes;
     return Array::Circular->new(@nums);
